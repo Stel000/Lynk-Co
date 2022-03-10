@@ -211,7 +211,7 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
         r = await session.put(url,data=json.dumps(data), headers=headers )
         _LOGGER.debug("_send_RES_command response: \nstatus: %s\nurl: %s\nheaders: %s\ncontent: %s", r.status,r.url,r.headers,await r.text('UTF-8'))
         if r.status == 200:
-            # _LOGGER.debug("_send_RES_command_status: %s", json.loads(await r.text()))
+            _LOGGER.debug("_send_RES_command_status: %s", json.loads(await r.text()))
             _LOGGER.error("message: %s", json.loads(await r.text())['message'])
             flag = True
             self.login_result = True
@@ -267,7 +267,7 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
             if r.status == 200:
                 data = json.loads(await r.text())
                 self._vehicles = data['list']
-                # _LOGGER.debug("_get_vehicles: %s", self._vehicles)
+                _LOGGER.debug("_get_vehicles: %s", self._vehicles)
                 return True
             else:
                 return False
@@ -286,10 +286,10 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
             url = "http://api.xchanger.cn/geelyTCAccess/tcservices/vehicle/status/{}?userId={}&latest=false&target=more%2Cbasic".format(
                 item['vin'], 
                 self._userId)
-            # _LOGGER.debug("_get_vehicle_status_url:%s \n %s",self._accessToken, url)
+            _LOGGER.debug("_get_vehicle_status_url:%s \n %s",self._accessToken, url)
             try:
                 r = await session.get(url, headers=headers)
-                # _LOGGER.debug("_get_vehicle_status response: \nstatus: %s\nurl: %s\nheaders: %s\ncontent: %s", r.status,r.url,r.headers,await r.text('UTF-8'))
+                _LOGGER.debug("_get_vehicle_status response: \nstatus: %s\nurl: %s\nheaders: %s\ncontent: %s", r.status,r.url,r.headers,await r.text('UTF-8'))
                 if r.status == 200:
                     data = json.loads(await r.text())['data']
                     data['plateNo']=item['plateNo'] 
@@ -337,5 +337,5 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
             ClientConnectorError
         ) as error:
             raise UpdateFailed(error)
-        # _LOGGER.debug("Data Coordinator: %s", tmp)
+        _LOGGER.debug("Data Coordinator: %s", tmp)
         return tmp
