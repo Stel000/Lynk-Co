@@ -128,7 +128,7 @@ async def async_unload_entry(hass, config_entry) -> bool:
     username = config_entry.title
     if unload_ok:
         hass.data[DOMAIN].pop(config_entry.entry_id)
-        _LOGGER.debug("Unloaded entry for %s", username)
+        _LOGGER.warning("Unloaded entry for %s", username)
         return True
     return False
 
@@ -156,7 +156,7 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
         update_interval = (
             datetime.timedelta(seconds=self._scan_interval)
         )
-        _LOGGER.debug("Data will be update every %s", update_interval)
+        _LOGGER.warning("Data will be update every %s", update_interval)
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=update_interval)
 
@@ -207,11 +207,11 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
                                         "value":self.service_data['value']  
                                         }]
 
-        _LOGGER.debug("_send_RES_command request: \nurl: %s\nheaders: %s\ndata: %s", url,headers,data)
+        _LOGGER.warning("_send_RES_command request: \nurl: %s\nheaders: %s\ndata: %s", url,headers,data)
         r = await session.put(url,data=json.dumps(data), headers=headers )
-        _LOGGER.debug("_send_RES_command response: \nstatus: %s\nurl: %s\nheaders: %s\ncontent: %s", r.status,r.url,r.headers,await r.text('UTF-8'))
+        _LOGGER.warning("_send_RES_command response: \nstatus: %s\nurl: %s\nheaders: %s\ncontent: %s", r.status,r.url,r.headers,await r.text('UTF-8'))
         if r.status == 200:
-            _LOGGER.debug("_send_RES_command_status: %s", json.loads(await r.text()))
+            _LOGGER.warning("_send_RES_command_status: %s", json.loads(await r.text()))
             _LOGGER.error("message: %s", json.loads(await r.text())['message'])
             flag = True
             self.login_result = True
@@ -267,7 +267,7 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
             if r.status == 200:
                 data = json.loads(await r.text())
                 self._vehicles = data['list']
-                _LOGGER.debug("_get_vehicles: %s", self._vehicles)
+                _LOGGER.warning("_get_vehicles: %s", self._vehicles)
                 return True
             else:
                 return False
@@ -286,17 +286,17 @@ class LynkCoDataUpdateCoordinator(DataUpdateCoordinator):
             url = "http://api.xchanger.cn/geelyTCAccess/tcservices/vehicle/status/{}?userId={}&latest=false&target=more%2Cbasic".format(
                 item['vin'], 
                 self._userId)
-            _LOGGER.debug("_get_vehicle_status_url:%s \n %s",self._accessToken, url)
+            _LOGGER.warning("_get_vehicle_status_url:%s \n %s",self._accessToken, url)
             try:
                 r = await session.get(url, headers=headers)
-                _LOGGER.debug("_get_vehicle_status response: \nstatus: %s\nurl: %s\nheaders: %s\ncontent: %s", r.status,r.url,r.headers,await r.text('UTF-8'))
+                _LOGGER.warning("_get_vehicle_status response: \nstatus: %s\nurl: %s\nheaders: %s\ncontent: %s", r.status,r.url,r.headers,await r.text('UTF-8'))
                 if r.status == 200:
                     data = json.loads(await r.text())['data']
                     data['plateNo']=item['plateNo'] 
                     data['seriesName']=item['seriesName']
                     data['colorCode']=item['colorCode']
                     data['tboxPlatform']=item['tboxPlatform']
-                    # _LOGGER.debug("_get_vehicle_status: %s", data)
+                    _LOGGER.warning("_get_vehicle_status: %s", data)
                     redata.append(data)
                 else:
                     self.login_result = False
