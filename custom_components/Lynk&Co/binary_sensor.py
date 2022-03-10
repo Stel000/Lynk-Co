@@ -44,7 +44,7 @@ class LynkCoBinarySensor(BinarySensorEntity):
 
     def __init__(self, vin, kind, coordinator):
         """Initialize."""
-        _LOGGER.warning(coordinator)
+        _LOGGER.warning(coordinator.data[vin])
         self._name = coordinator.data[vin]["plateNo"]
         self.kind = kind
         self.vin = vin
