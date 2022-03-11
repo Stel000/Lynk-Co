@@ -45,7 +45,7 @@ class LynkCOEntity(TrackerEntity, RestoreEntity, Entity):
         self._hass = hass
         self._vin = vin
         self.coordinator = coordinator  
-        self._unique_id = coordinator.data[vin]["result"]['vin']
+        self._unique_id = coordinator.data[vin]["vehicleStatus"]['configuration']['vin']
         self._name = coordinator.data[vin]["plateNo"]
         self._icon = "mdi:car"
         self.sw_version = '001'

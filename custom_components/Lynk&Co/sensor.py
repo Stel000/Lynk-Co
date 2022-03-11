@@ -48,7 +48,7 @@ class LynkCoSensor(Entity):
         self.kind = kind
         self.vin = vin
         self.coordinator = coordinator
-        self._unique_id = coordinator.data[vin]["result"]['vin']
+        self._unique_id = coordinator.data[vin]["vehicleStatus"]['configuration']['vin']
         self._device_class = None
         self._attrs = {"friendly_name_cn":SENSOR_TYPES[self.kind][ATTR_FRIENDLY_NAME]}
         self._unit_system = "Metric"
